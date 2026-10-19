@@ -24,7 +24,7 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <plugin>z1_coppelia_hw/Z1EffortFakeHardware</plugin>
                 </xacro:if> -->
                 <xacro:if value="${sim_ignition}">
-                    <plugin>ign_ros2_control/IgnitionSystem</plugin>
+                    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
                 </xacro:if>
                 <xacro:unless value="${sim_ignition}">
                     <plugin>z1_hardware_interface/Z1HardwareInterface</plugin>
