@@ -9,6 +9,10 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <exec_depend>xacro</exec_depend>
+  <!-- only needed with with_camera:=true -->
+  <exec_depend>realsense2_description</exec_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>
