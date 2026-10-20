@@ -41,6 +41,10 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <param name="min"> -${torqueMax} </param>
                     <param name="max"> ${torqueMax} </param>
                 </command_interface>
+                <!-- Joint damping [N·m·s/rad] for the motor firmware: Z1 driver only -->
+                <xacro:unless value="${sim_ignition}">
+                    <command_interface name="damping" />
+                </xacro:unless>
                 <state_interface name="position" />
                 <state_interface name="velocity" />
                 <state_interface name="effort" />
@@ -56,6 +60,10 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <param name="min"> -${torqueMax} </param>
                     <param name="max"> ${torqueMax} </param>
                 </command_interface>
+                <!-- Joint damping [N·m·s/rad] for the motor firmware: Z1 driver only -->
+                <xacro:unless value="${sim_ignition}">
+                    <command_interface name="damping" />
+                </xacro:unless>
                 <xacro:if value="${sim_ignition}">
                     <!-- setting initial position in gazebo -->
                     <state_interface name="position">
@@ -78,6 +86,10 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <param name="min"> -${torqueMax} </param>
                     <param name="max"> ${torqueMax} </param>
                 </command_interface>
+                <!-- Joint damping [N·m·s/rad] for the motor firmware: Z1 driver only -->
+                <xacro:unless value="${sim_ignition}">
+                    <command_interface name="damping" />
+                </xacro:unless>
                 <xacro:if value="${sim_ignition}">
                     <!-- setting initial position in gazebo -->
                     <state_interface name="position">
@@ -100,6 +112,10 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <param name="min"> -${torqueMax} </param>
                     <param name="max"> ${torqueMax} </param>
                 </command_interface>
+                <!-- Joint damping [N·m·s/rad] for the motor firmware: Z1 driver only -->
+                <xacro:unless value="${sim_ignition}">
+                    <command_interface name="damping" />
+                </xacro:unless>
                 <state_interface name="position" />
                 <state_interface name="velocity" />
                 <state_interface name="effort" />
@@ -114,6 +130,10 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <param name="min"> -${torqueMax} </param>
                     <param name="max"> ${torqueMax} </param>
                 </command_interface>
+                <!-- Joint damping [N·m·s/rad] for the motor firmware: Z1 driver only -->
+                <xacro:unless value="${sim_ignition}">
+                    <command_interface name="damping" />
+                </xacro:unless>
                 <state_interface name="position" />
                 <state_interface name="velocity" />
                 <state_interface name="effort" />
@@ -128,6 +148,10 @@ https://github.com/UniversalRobots/Universal_Robots_ROS2_Description/blob/rollin
                     <param name="min"> -${torqueMax} </param>
                     <param name="max"> ${torqueMax} </param>
                 </command_interface>
+                <!-- Joint damping [N·m·s/rad] for the motor firmware: Z1 driver only -->
+                <xacro:unless value="${sim_ignition}">
+                    <command_interface name="damping" />
+                </xacro:unless>
                 <state_interface name="position" />
                 <state_interface name="velocity" />
                 <state_interface name="effort" />
