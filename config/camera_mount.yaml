@@ -1,0 +1,21 @@
+# Wrist D435i on the Z1 gripper. Written by python -m z1_handeye.mount; do not edit by hand.
+parent: gripperStator
+camera_serial: "339222070582"
+run: handeye/20261106-202902  # hand-eye run folder, relative to $Z1_DATA_DIR when inside it
+color_optical:  # measured: gripperStator to camera_color_optical_frame, m
+  xyz: [0.110208, 0.037138, -0.049628]
+  quat_xyzw: [0.4970609, -0.4986267, 0.5086678, -0.495539]
+depth_to_color:  # camera_link to camera_color_frame, as the driver publishes it
+  source: nominal  # nominal or factory
+  dump: null  # the realsense-info dump, when factory
+  xyz: [0.0, 0.015, 0.0]
+  quat_xyzw: [0.0, 0.0, 0.0, 1.0]
+camera_link:  # derived: gripperStator to camera_link, m and rad (URDF rpy)
+  xyz: [0.10998685382196893, 0.022140622256902786, -0.049455503046999104]
+  rpy: [-0.01150047602854912, -0.008603813548692996, -0.014645636637667919]
+sensor_origin:  # derived: gripperStator to camera_bottom_screw_frame, the sensor_d435i origin
+  xyz: [0.09923580146190907, 0.004653601720592152, -0.06184416665183967]
+  rpy: [-0.01150047602854912, -0.008603813548692996, -0.014645636637667919]
+inertial:  # camera_link inertial of Intel's _d435.urdf.xacro 4.58.4: kg, kg m2
+  mass: 0.072
+  inertia: [0.003881243, 0.00049894, 0.003879257, 0.0, 0.0, 0.0]  # ixx, iyy, izz, ixy, ixz, iyz

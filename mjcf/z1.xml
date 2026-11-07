@@ -11,6 +11,8 @@
   7. Keyframe home: ctrl dropped (ctrl is torque now). Added keyframe start.
   8. gripperStator: added site z1_tcp at the z1_description URDF frame z1_tcp
      (gripperStator + 0.14 m along x, no rotation), in site group 5, hidden by default.
+  9. Includes d435i.xml inside gripperStator: the wrist D435i at the measured mount, written by
+     python -m z1_handeye.mount.
 -->
 <mujoco model="z1">
   <compiler angle="radian" meshdir="assets"/>
@@ -117,6 +119,7 @@
                     <inertial pos="0.04764427 -0.00035819 -0.00249162" mass="0.52603655"
                       fullinertia="0.00038683 0.00068614 0.00066293 -0.00000359 0.00007662 0.00000209"/>
                     <site name="z1_tcp" pos="0.14 0 0" size="0.005" group="5"/>
+                    <include file="d435i.xml"/>
                   </body>
                   <geom pos="0.051 0 0" type="mesh" mesh="z1_GripperStator" class="visual"/>
                   <geom class="z1_gripper_stator_collision" mesh="z1_GripperStator_col_1"/>

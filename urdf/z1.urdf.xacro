@@ -7,7 +7,7 @@
     <xacro:arg name="controllers" default="$(find z1_bringup)/config/z1_controllers.yaml" />
     <xacro:arg name="sim_ignition" default="true" />
     <xacro:arg name="with_gripper" default="true" />
-    <xacro:arg name="with_camera" default="false" />
+    <xacro:arg name="with_camera" default="true" />
 
 
     <xacro:include filename="$(find z1_description)/urdf/const.xacro" />
@@ -357,39 +357,24 @@
         sim_ignition="$(arg sim_ignition)"
         with_gripper="$(arg with_gripper)" />
 
-    <!-- Camera mount on the gripper. Without the gripper the frame sits at the same place, on link06. -->
-    <xacro:property name="camera_on_gripper" value="${'$(arg with_gripper)'.lower() == 'true'}" />
-    <xacro:property name="camera_parent" value="${'gripperStator' if camera_on_gripper else 'link06'}" />
-    <xacro:property name="camera_x" value="${0.094 if camera_on_gripper else 0.051 + 0.094}" />
-
+    <!-- Wrist D435i at the measured mount of config/camera_mount.yaml (python -m z1_handeye.mount).
+         The URDF ends at camera_link; the RealSense driver publishes camera_link to the color
+         and depth frames from the camera's own extrinsics. Without the gripper the mount sits at
+         the same place, on link06, 0.051 m behind gripperStator. -->
     <xacro:if value="$(arg with_camera)">
+        <xacro:property name="camera_on_gripper" value="${'$(arg with_gripper)'.lower() == 'true'}" />
+        <xacro:property name="mount" value="${xacro.load_yaml('$(find z1_description)/config/camera_mount.yaml')['sensor_origin']}" />
         <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
 
-        <!-- Nominal mount of the z1_camera URDF. Measure the real one with the hand-eye
-             calibration (z1_extra, pixi run handeye) and put its origin here. -->
         <xacro:sensor_d435i
-            parent="${camera_parent}"
+            parent="${'gripperStator' if camera_on_gripper else 'link06'}"
             name="camera"
-            use_nominal_extrinsics="true">
+            use_nominal_extrinsics="false">
 
-            <origin xyz="${camera_x} 0 -0.056"
-                    rpy="0 0 0"/>
+            <origin xyz="${mount['xyz'][0] + (0.0 if camera_on_gripper else 0.051)} ${mount['xyz'][1]} ${mount['xyz'][2]}"
+                    rpy="${mount['rpy'][0]} ${mount['rpy'][1]} ${mount['rpy'][2]}"/>
 
         </xacro:sensor_d435i>
     </xacro:if>
-
-    <xacro:unless value="$(arg with_camera)">
-        <!-- Dummy camera frame so TF tree stays valid. It sits where the camera model puts
-             camera_link: the bottom screw above, plus (0.0106, 0.0175, 0.0125) m
-             (_d435.urdf.xacro of realsense2_description). -->
-        <joint name="camera_joint" type="fixed">
-            <parent link="${camera_parent}"/>
-            <child link="camera_link"/>
-            <origin xyz="${camera_x + 0.0106} 0.0175 ${-0.056 + 0.0125}" rpy="0 0 0"/>
-        </joint>
-
-        <link name="camera_link"/>
-
-    </xacro:unless>
 
 </robot>
