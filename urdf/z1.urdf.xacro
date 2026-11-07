@@ -365,7 +365,8 @@
     <xacro:if value="$(arg with_camera)">
         <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
 
-        <!-- TODO: measure the z offset on the real mount. The D435i uses -0.056 and the dummy frame +0.055. -->
+        <!-- Nominal mount of the z1_camera URDF. Measure the real one with the hand-eye
+             calibration (z1_extra, pixi run handeye) and put its origin here. -->
         <xacro:sensor_d435i
             parent="${camera_parent}"
             name="camera"
@@ -378,11 +379,13 @@
     </xacro:if>
 
     <xacro:unless value="$(arg with_camera)">
-        <!-- Dummy camera frame so TF tree stays valid -->
+        <!-- Dummy camera frame so TF tree stays valid. It sits where the camera model puts
+             camera_link: the bottom screw above, plus (0.0106, 0.0175, 0.0125) m
+             (_d435.urdf.xacro of realsense2_description). -->
         <joint name="camera_joint" type="fixed">
             <parent link="${camera_parent}"/>
             <child link="camera_link"/>
-            <origin xyz="${camera_x} 0 0.055" rpy="0 0 0"/>
+            <origin xyz="${camera_x + 0.0106} 0.0175 ${-0.056 + 0.0125}" rpy="0 0 0"/>
         </joint>
 
         <link name="camera_link"/>
