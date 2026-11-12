@@ -2,14 +2,14 @@
      Written by python -m z1_handeye.mount from config/camera_mount.yaml; do not edit by hand.
      The body frame is camera_link; every geom is visual only. -->
 <mujoco>
-  <body name="d435i" pos="0.10998685382196893 0.022140622256902786 -0.049455503046999104" quat="0.9999472222290571 -0.005781500128524126 -0.004259600094691986 -0.007347300163332184">
+  <body name="d435i" pos="0.1100589990488774 0.02207492692942368 -0.049251642772841886" quat="0.9998510795979894 -0.012345335460878957 -0.007973853054143762 -0.00904593757243606">
     <inertial pos="0 0 0" mass="0.072" fullinertia="0.003881243 0.00049894 0.003879257 0.0 0.0 0.0"/>
     <geom name="d435i_box" type="box" size="0.012525 0.045 0.0125" pos="-0.0082 -0.0175 0.0" rgba="0.12 0.12 0.13 1.0" contype="0" conaffinity="0" group="2"/>
     <geom name="d435i_infra1_lens" type="cylinder" size="0.0045 0.0006" pos="0.0043 0.0 0.0" quat="0.7071068 0 0.7071068 0" rgba="0.02 0.02 0.03 1.0" contype="0" conaffinity="0" group="2"/>
     <geom name="d435i_infra2_lens" type="cylinder" size="0.0045 0.0006" pos="0.0043 -0.05 0.0" quat="0.7071068 0 0.7071068 0" rgba="0.02 0.02 0.03 1.0" contype="0" conaffinity="0" group="2"/>
     <geom name="d435i_color_lens" type="cylinder" size="0.0045 0.0006" pos="0.0043 0.015 0.0" quat="0.7071068 0 0.7071068 0" rgba="0.02 0.02 0.03 1.0" contype="0" conaffinity="0" group="2"/>
     <geom name="d435i_projector_lens" type="cylinder" size="0.0035 0.0006" pos="0.0043 -0.0148 0.0" quat="0.7071068 0 0.7071068 0" rgba="0.02 0.02 0.03 1.0" contype="0" conaffinity="0" group="2"/>
-    <camera name="d435i_color" pos="0.0 0.015 0.0" quat="0.5 0.5 -0.5 -0.5" resolution="1280 720"
+    <camera name="d435i_color" pos="-0.00012664062367698025 0.015067977838947925 -4.5022208566518225e-06" quat="-0.4994358816952987 -0.502226999981752 0.49399024065273206 0.5042871034484467" resolution="1280 720"
       sensorsize="0.0012799999999999999 0.0007199999999999999" focal="0.0009044999999999999 0.0009037499999999999" principal="-6.600000000000022e-06 -1.9189999999999998e-05"/>
     <camera name="d435i_depth" pos="0 0 0" quat="0.5 0.5 -0.5 -0.5" fovy="58.0" resolution="424 240"/>
   </body>

@@ -6,16 +6,16 @@ color_optical:  # measured: gripperStator to camera_color_optical_frame, m
   xyz: [0.110208, 0.037138, -0.049628]
   quat_xyzw: [0.4970609, -0.4986267, 0.5086678, -0.495539]
 depth_to_color:  # camera_link to camera_color_frame, as the driver publishes it
-  source: nominal  # nominal or factory
-  dump: null  # the realsense-info dump, when factory
-  xyz: [0.0, 0.015, 0.0]
-  quat_xyzw: [0.0, 0.0, 0.0, 1.0]
+  source: factory  # nominal or factory
+  dump: "339222070582_20261111-170900.json"  # the realsense-info dump, when factory
+  xyz: [-0.00012664062367698025, 0.015067977838947925, -4.5022208566518225e-06]
+  quat_xyzw: [0.006543990541083988, 0.0037528722546307626, 0.0016927687879359267, 0.999970112889115]
 camera_link:  # derived: gripperStator to camera_link, m and rad (URDF rpy)
-  xyz: [0.10998685382196893, 0.022140622256902786, -0.049455503046999104]
-  rpy: [-0.01150047602854912, -0.008603813548692996, -0.014645636637667919]
+  xyz: [0.1100589990488774, 0.02207492692942368, -0.049251642772841886]
+  rpy: [-0.02454840621287431, -0.016169386006470443, -0.017895595500239198]
 sensor_origin:  # derived: gripperStator to camera_bottom_screw_frame, the sensor_d435i origin
-  xyz: [0.09923580146190907, 0.004653601720592152, -0.06184416665183967]
-  rpy: [-0.01150047602854912, -0.008603813548692996, -0.014645636637667919]
+  xyz: [0.0993386006295611, 0.004462392812991538, -0.061488132881174246]
+  rpy: [-0.02454840621287431, -0.016169386006470443, -0.017895595500239198]
 inertial:  # camera_link inertial of Intel's _d435.urdf.xacro 4.58.4: kg, kg m2
   mass: 0.072
   inertia: [0.003881243, 0.00049894, 0.003879257, 0.0, 0.0, 0.0]  # ixx, iyy, izz, ixy, ixz, iyz
