@@ -3,15 +3,19 @@
 <package format="3">
   <name>z1_description</name>
   <version>0.0.0</version>
-  <description>URDF and meshes file for the Unitree Z1 manipulator</description>
+  <description>URDF, MuJoCo model and meshes of the Unitree Z1 arm, with the lab's end-of-arm variants</description>
   <maintainer email="matteodv99tn@gmail.com">Matteo Dalle Vedove</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>xacro</exec_depend>
-  <!-- only needed with with_camera:=true -->
+  <!-- The camera macros of every variant. -->
   <exec_depend>realsense2_description</exec_depend>
+  <!-- launch/display.launch.py -->
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>rviz2</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
