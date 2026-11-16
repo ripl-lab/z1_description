@@ -26,13 +26,33 @@ Two more arguments work with every variant:
 - `with_camera` (default `true`): the variant's cameras and their printed mounts. `false` leaves them out, also of
   the gravity model of `z1_hardware_interface`.
 
-Look at a variant:
+`z1_bringup` and `z1_moveit` take the same `variant` argument.
+
+## View a variant
+
+In RViz, with a slider for each joint. From b2_ws:
 
 ```bash
-ros2 launch z1_description display.launch.py variant:=bota_probe
+pixi run ros2 launch z1_description display.launch.py variant:=bota_probe   # or unitree_gripper, robotiq_2f85
+pixi run ros2 launch b2_description display.launch.py model:=b2z1_bota_probe  # the arm on the B2
 ```
 
-`z1_bringup` and `z1_moveit` take the same `variant` argument.
+- Every frame shows its axes and its name: x red, y green, z blue. The model is 60 % opaque, so the frames inside
+  a part stay visible. Turn single frames on or off under TF, Frames.
+- Mouse: left drag orbits, middle drag (or Shift and left drag) pans, the wheel zooms. To centre the view on a
+  part, press F, then click the part.
+- If RViz opens no window under Wayland, start it with `QT_QPA_PLATFORM=xcb` before the command.
+
+As pictures, with no ROS nodes: four views of each variant's end of arm, every frame drawn and named, in the
+`gripperStator` frame.
+
+```bash
+pixi run python src/z1_description/scripts/render_frames.py               # all variants, PNG files in ./z1_frames
+pixi run python src/z1_description/scripts/render_frames.py bota_probe --out /tmp/frames
+```
+
+The live wrench of the Bota sensor has its own viewer in b2_ws: `pixi run viz-bota` (`tools/bota_ft/viz_ft.py`).
+It draws the force and the torque in the same frame as `bota_wrench`.
 
 ### Frames
 
@@ -107,7 +127,8 @@ The fixed joint is `z1_mount`. Set `mount_joint` to give it another name.
 | `meshes/visual/`, `meshes/collision/` | Unitree's meshes, in m. |
 | `meshes/lab/` | The lab parts in the `gripperStator` frame, in mm. `meshes/lab/collision/` holds their convex hulls. Generated. |
 | `mjcf/` | The MuJoCo model of the Z1 with Unitree's gripper and the D435i. The lab variants have no MuJoCo model yet. |
-| `launch/display.launch.py` | RViz with joint sliders. |
+| `launch/display.launch.py`, `config/display.rviz` | RViz with joint sliders. |
+| `scripts/render_frames.py` | Pictures of each variant with every frame drawn. |
 
 ## Regenerate
 
