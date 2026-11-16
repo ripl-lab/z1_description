@@ -1,0 +1,39 @@
+# Written by cad/gripper-prototype/export_z1_description.py in b2_ws; do not edit by hand.
+# Frame G is gripperStator: origin at the J6 flange face, x out along J6, y along the gripper motor axis,
+# z up at the zero pose. Lengths in m, angles in rad, masses in kg, inertias in kg m2 about the centre of
+# mass in the axes of frame G (ixx, iyy, izz, ixy, ixz, iyz). Each camera origin is its bottom screw frame.
+title: "Robotiq 2F-85 on its coupling, with a D405 on the portal over the gripper (proposal I)"
+parts:
+  robotiq_mount:
+    mesh: "lab/robotiq_mount.stl"
+    collision: "lab/collision/robotiq_mount.stl"
+    rgba: [0.85, 0.45, 0.1, 1.0]
+    mass: 0.0949
+    com: [0.085792, -0.003226, 4.5e-05]
+    inertia: [0.000108825, 0.000103555, 0.000134315, -6.67e-07, -9.7e-08, -1.6e-08]
+    source: "robotiq_mount.py; printed PETG, 1.8 mm walls, 40 % gyroid"
+  robotiq_2f85:
+    mesh: "lab/robotiq_2f85.stl"
+    collision: "lab/collision/robotiq_2f85.stl"
+    rgba: [0.15, 0.15, 0.15, 1.0]
+    mass: 0.921
+    com: [0.1713, 0.0, 0.0]
+    inertia: [0.001338106, 0.00143554, 0.002370943, -8.7331e-05, 3.329e-06, 3.495e-06]
+    source: "Robotiq 2F-85 open STEP with the GRP-CPL-062 coupling; 921 g and the centre of mass from the UR manual"
+  d405_mount:
+    mesh: "lab/d405_mount_robotiq.stl"
+    collision: "lab/collision/d405_mount_robotiq.stl"
+    rgba: [0.85, 0.45, 0.1, 1.0]
+    mass: 0.0414
+    com: [0.078177, -0.003506, 0.041484]
+    inertia: [5.3318e-05, 3.364e-05, 6.4394e-05, 4e-09, -1.0549e-05, 7e-09]
+    source: "robotiq_camera.py, D405 over the gripper; printed PETG, 1.8 mm walls, 40 % gyroid"
+frames:
+  z1_tcp:
+    xyz: [0.252, 0.0, 0.0]
+    rpy: [0.0, 0.0, 0.0]
+cameras:
+  d405:
+    model: "d405"
+    xyz: [0.098274, 0.0, 0.049388]
+    rpy: [0.0, 0.277507, 0.0]

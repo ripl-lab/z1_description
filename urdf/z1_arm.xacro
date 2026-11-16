@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!-- The Unitree Z1 arm, link00 to link06, with no gripper. Copied from unitree_ros (see README.md); the numbers
+     are in const.xacro. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find z1_description)/urdf/const.xacro" />
+
+    <!-- Fixes link00 to parent at origin, through the fixed joint mount_joint. -->
+    <xacro:macro name="z1_arm" params="parent *origin mount_joint:=z1_mount">
+        <material name="Grey">
+            <color rgba="0.3 0.3 0.3 1.0" />
+        </material>
+
+        <joint name="${mount_joint}" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}" />
+            <child link="link00" />
+        </joint>
+
+        <link name="link00">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link00.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link00.STL"
+                        scale="1 1 1" />
+                </geometry>
+                <origin rpy="0 0 0" xyz="0 0 ${motor_height/2.0}" />
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L00_ComX} ${L00_ComY} ${L00_ComZ}" />
+                <mass value="${L00_Mass}" />
+                <inertia
+                    ixx="${L00_Ixx}" ixy="${L00_Ixy}" ixz="${L00_Ixz}"
+                    iyy="${L00_Iyy}" iyz="${L00_Iyz}"
+                    izz="${L00_Izz}" />
+            </inertial>
+        </link>
+
+        <joint name="joint1" type="revolute">
+            <origin rpy="0 0 0" xyz="0 0 0.0585" />
+            <parent link="link00" />
+            <child link="link01" />
+            <axis xyz="0 0 1" />
+            <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+            <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${joint1_PositionMin}"
+                upper="${joint1_PositionMax}" />
+        </joint>
+
+        <link name="link01">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link01.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link01.STL"
+                        scale="1 1 1" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L01_ComX} ${L01_ComY} ${L01_ComZ}" />
+                <mass value="${L01_Mass}" />
+                <inertia
+                    ixx="${L01_Ixx}" ixy="${L01_Ixy}" ixz="${L01_Ixz}"
+                    iyy="${L01_Iyy}" iyz="${L01_Iyz}"
+                    izz="${L01_Izz}" />
+            </inertial>
+        </link>
+
+        <joint name="joint2" type="revolute">
+            <origin rpy="0 0 0" xyz="0 0 0.045" />
+            <parent link="link01" />
+            <child link="link02" />
+            <axis xyz="0 1 0" />
+            <dynamics damping="${2*jointDamping}" friction="${2*jointFriction}" />
+            <limit effort="${2*torqueMax}" velocity="${velocityMax}" lower="${joint2_PositionMin}"
+                upper="${joint2_PositionMax}" />
+        </joint>
+
+        <link name="link02">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link02.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link02.STL"
+                        scale="1 1 1" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L02_ComX} ${L02_ComY} ${L02_ComZ}" />
+                <mass value="${L02_Mass}" />
+                <inertia
+                    ixx="${L02_Ixx}" ixy="${L02_Ixy}" ixz="${L02_Ixz}"
+                    iyy="${L02_Iyy}" iyz="${L02_Iyz}"
+                    izz="${L02_Izz}" />
+            </inertial>
+        </link>
+
+        <joint name="joint3" type="revolute">
+            <origin rpy="0 0 0" xyz="-0.35 0 0" />
+            <parent link="link02" />
+            <child link="link03" />
+            <axis xyz="0 1 0" />
+            <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+            <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${joint3_PositionMin}"
+                upper="${joint3_PositionMax}" />
+        </joint>
+
+        <link name="link03">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link03.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link03.STL"
+                        scale="1 1 1" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L03_ComX} ${L03_ComY} ${L03_ComZ}" />
+                <mass value="${L03_Mass}" />
+                <inertia
+                    ixx="${L03_Ixx}" ixy="${L03_Ixy}" ixz="${L03_Ixz}"
+                    iyy="${L03_Iyy}" iyz="${L03_Iyz}"
+                    izz="${L03_Izz}" />
+            </inertial>
+        </link>
+
+        <joint name="joint4" type="revolute">
+            <origin rpy="0 0 0" xyz="0.218 0 0.057" />
+            <parent link="link03" />
+            <child link="link04" />
+            <axis xyz="0 1 0" />
+            <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+            <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${joint4_PositionMin}"
+                upper="${joint4_PositionMax}" />
+        </joint>
+
+        <link name="link04">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link04.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link04.STL"
+                        scale="1 1 1" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L04_ComX} ${L04_ComY} ${L04_ComZ}" />
+                <mass value="${L04_Mass}" />
+                <inertia
+                    ixx="${L04_Ixx}" ixy="${L04_Ixy}" ixz="${L04_Ixz}"
+                    iyy="${L04_Iyy}" iyz="${L04_Iyz}"
+                    izz="${L04_Izz}" />
+            </inertial>
+        </link>
+
+        <joint name="joint5" type="revolute">
+            <origin rpy="0 0 0" xyz="0.07 0.0 0.0" />
+            <parent link="link04" />
+            <child link="link05" />
+            <axis xyz="0 0 1" />
+            <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+            <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${joint5_PositionMin}"
+                upper="${joint5_PositionMax}" />
+        </joint>
+
+        <link name="link05">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link05.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link05.STL"
+                        scale="1 1 1" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L05_ComX} ${L05_ComY} ${L05_ComZ}" />
+                <mass value="${L05_Mass}" />
+                <inertia
+                    ixx="${L05_Ixx}" ixy="${L05_Ixy}" ixz="${L05_Ixz}"
+                    iyy="${L05_Iyy}" iyz="${L05_Iyz}"
+                    izz="${L05_Izz}" />
+            </inertial>
+        </link>
+
+        <joint name="joint6" type="revolute">
+            <origin rpy="0 0 0" xyz="0.0492 0.0 0.0" />
+            <parent link="link05" />
+            <child link="link06" />
+            <axis xyz="1 0 0" />
+            <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+            <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${joint6_PositionMin}"
+                upper="${joint6_PositionMax}" />
+        </joint>
+
+        <link name="link06">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/visual/z1_Link06.dae" scale="1 1 1" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/collision/z1_Link06.STL"
+                        scale="1 1 1" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${L06_ComX} ${L06_ComY} ${L06_ComZ}" />
+                <mass value="${L06_Mass}" />
+                <inertia
+                    ixx="${L06_Ixx}" ixy="${L06_Ixy}" ixz="${L06_Ixz}"
+                    iyy="${L06_Iyy}" iyz="${L06_Iyz}"
+                    izz="${L06_Izz}" />
+            </inertial>
+        </link>
+    </xacro:macro>
+
+</robot>

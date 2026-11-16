@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<!-- Pieces the lab builds share. Each build bolts to the gripper motor with Unitree's clamshell removed, and
+     its numbers and meshes come from config/lab/<variant>.yaml and meshes/lab/, which
+     cad/gripper-prototype/export_z1_description.py in b2_ws writes from the lab CAD. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- At file scope: realsense2_description defines its materials once per robot behind a property, and
+         inside a macro that property would not outlive the macro. -->
+    <xacro:include filename="$(find realsense2_description)/urdf/_d405.urdf.xacro" />
+    <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
+
+    <!-- The gripper motor without its clamshell, fixed to link06 like Unitree's gripperStator. Its frame is
+         frame G of the lab CAD. with_gripper adds jointGripper: the motor stays wired, its output disk turns
+         with nothing on it. -->
+    <xacro:macro name="z1_bare_gripper_motor" params="with_gripper">
+        <joint name="gripperStatorLink" type="fixed">
+            <origin rpy="0 0 0" xyz="0.051 0.0 0.0" />
+            <parent link="link06" />
+            <child link="gripperStator" />
+        </joint>
+
+        <link name="gripperStator">
+            <visual>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/lab/gripper_motor.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="Grey" />
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/lab/collision/gripper_motor.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+            </collision>
+            <!-- Unitree's numbers for the motor with its fixed jaw. Nobody has weighed the bare motor, which
+                 is lighter. -->
+            <inertial>
+                <origin rpy="0 0 0"
+                    xyz="${GripperStator_ComX} ${GripperStator_ComY} ${GripperStator_ComZ}" />
+                <mass value="${GripperStator_Mass}" />
+                <inertia
+                    ixx="${GripperStator_Ixx}" ixy="${GripperStator_Ixy}" ixz="${GripperStator_Ixz}"
+                    iyy="${GripperStator_Iyy}" iyz="${GripperStator_Iyz}"
+                    izz="${GripperStator_Izz}" />
+            </inertial>
+        </link>
+
+        <xacro:if value="${with_gripper}">
+            <joint name="jointGripper" type="revolute">
+                <origin rpy="0 0 0" xyz="0.049 0.0 0" />
+                <parent link="gripperStator" />
+                <child link="gripperMover" />
+                <axis xyz="0 1 0" />
+                <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+                <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${Gripper_PositionMin}"
+                    upper="${Gripper_PositionMax}" />
+            </joint>
+
+            <!-- The output disk. 10 g is a guess; it keeps the joint in gz-sim, which drops massless links. -->
+            <link name="gripperMover">
+                <inertial>
+                    <origin rpy="0 0 0" xyz="0 0 0" />
+                    <mass value="0.01" />
+                    <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+                </inertial>
+            </link>
+        </xacro:if>
+    </xacro:macro>
+
+    <!-- One rigid part fixed to gripperStator. p is its entry under parts: in config/lab/<variant>.yaml: a mesh
+         in frame G (mm), a convex collision mesh, a colour, and the mass, centre of mass and inertia. -->
+    <xacro:macro name="z1_lab_part" params="name p">
+        <joint name="${name}_joint" type="fixed">
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <parent link="gripperStator" />
+            <child link="${name}" />
+        </joint>
+
+        <link name="${name}">
+            <visual>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/${p['mesh']}" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="${name}_colour">
+                    <color rgba="${p['rgba'][0]} ${p['rgba'][1]} ${p['rgba'][2]} ${p['rgba'][3]}" />
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://z1_description/meshes/${p['collision']}" scale="0.001 0.001 0.001" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin rpy="0 0 0" xyz="${p['com'][0]} ${p['com'][1]} ${p['com'][2]}" />
+                <mass value="${p['mass']}" />
+                <inertia
+                    ixx="${p['inertia'][0]}" ixy="${p['inertia'][3]}" ixz="${p['inertia'][4]}"
+                    iyy="${p['inertia'][1]}" iyz="${p['inertia'][5]}"
+                    izz="${p['inertia'][2]}" />
+            </inertial>
+        </link>
+    </xacro:macro>
+
+    <!-- A named frame on gripperStator. f is its entry under frames: (xyz, rpy). -->
+    <xacro:macro name="z1_lab_frame" params="name f">
+        <joint name="${name}_joint" type="fixed">
+            <origin xyz="${f['xyz'][0]} ${f['xyz'][1]} ${f['xyz'][2]}" rpy="${f['rpy'][0]} ${f['rpy'][1]} ${f['rpy'][2]}" />
+            <parent link="gripperStator" />
+            <child link="${name}" />
+        </joint>
+        <link name="${name}" />
+    </xacro:macro>
+
+    <!-- A RealSense on gripperStator, from realsense2_description. c is its entry under cameras: the model
+         (d405 or d435i) and the origin of its bottom screw frame. The URDF ends at <name>_link: the driver
+         publishes the optical frames from the camera's own extrinsics. -->
+    <xacro:macro name="z1_lab_camera" params="name c">
+        <xacro:if value="${c['model'] == 'd405'}">
+            <xacro:sensor_d405 parent="gripperStator" name="${name}" use_nominal_extrinsics="false">
+                <origin xyz="${c['xyz'][0]} ${c['xyz'][1]} ${c['xyz'][2]}" rpy="${c['rpy'][0]} ${c['rpy'][1]} ${c['rpy'][2]}" />
+            </xacro:sensor_d405>
+        </xacro:if>
+        <xacro:if value="${c['model'] == 'd435i'}">
+            <xacro:sensor_d435i parent="gripperStator" name="${name}" use_nominal_extrinsics="false">
+                <origin xyz="${c['xyz'][0]} ${c['xyz'][1]} ${c['xyz'][2]}" rpy="${c['rpy'][0]} ${c['rpy'][1]} ${c['rpy'][2]}" />
+            </xacro:sensor_d435i>
+        </xacro:if>
+        <xacro:unless value="${c['model'] in ('d405', 'd435i')}">
+            ${xacro.fatal('camera', name, 'has model', c['model'], ': z1_lab_camera knows d405 and d435i')}
+        </xacro:unless>
+    </xacro:macro>
+
+</robot>

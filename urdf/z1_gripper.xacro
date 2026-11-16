@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!-- Unitree's gripper on the Z1: the motor with its fixed jaw (gripperStator), the moving jaw (gripperMover) and
+     z1_tcp, and the wrist D435i at the mount measured by hand-eye calibration (config/camera_mount.yaml, written
+     by python -m z1_handeye.mount). -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- with_gripper and with_camera are booleans. The URDF ends at camera_link: the RealSense driver publishes
+         camera_link to the color and depth frames from the camera's own extrinsics. Without the gripper the
+         camera sits at the same place, on link06, 0.051 m behind gripperStator. -->
+    <xacro:macro name="z1_unitree_gripper" params="with_gripper with_camera">
+        <xacro:if value="${with_gripper}">
+            <joint name="gripperStatorLink" type="fixed">
+                <origin rpy="0 0 0" xyz="0.051 0.0 0.0" />
+                <parent link="link06" />
+                <child link="gripperStator" />
+            </joint>
+
+            <link name="gripperStator">
+                <visual>
+                    <geometry>
+                        <mesh filename="package://z1_description/meshes/visual/z1_GripperStator.dae"
+                            scale="1 1 1" />
+                    </geometry>
+                    <material name="Grey" />
+                </visual>
+                <collision>
+                    <geometry>
+                        <mesh filename="package://z1_description/meshes/collision/z1_GripperStator.STL"
+                            scale="1 1 1" />
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin rpy="0 0 0"
+                        xyz="${GripperStator_ComX} ${GripperStator_ComY} ${GripperStator_ComZ}" />
+                    <mass value="${GripperStator_Mass}" />
+                    <inertia
+                        ixx="${GripperStator_Ixx}" ixy="${GripperStator_Ixy}" ixz="${GripperStator_Ixz}"
+                        iyy="${GripperStator_Iyy}" iyz="${GripperStator_Iyz}"
+                        izz="${GripperStator_Izz}" />
+                </inertial>
+            </link>
+
+            <joint name="jointGripper" type="revolute">
+                <origin rpy="0 0 0" xyz="0.049 0.0 0" />
+                <parent link="gripperStator" />
+                <child link="gripperMover" />
+                <axis xyz="0 1 0" />
+                <dynamics damping="${jointDamping}" friction="${jointFriction}" />
+                <limit effort="${torqueMax}" velocity="${velocityMax}" lower="${Gripper_PositionMin}"
+                    upper="${Gripper_PositionMax}" />
+            </joint>
+
+            <link name="gripperMover">
+                <visual>
+                    <geometry>
+                        <mesh filename="package://z1_description/meshes/visual/z1_GripperMover.dae"
+                            scale="1 1 1" />
+                    </geometry>
+                    <material name="Grey" />
+                </visual>
+                <collision>
+                    <geometry>
+                        <mesh filename="package://z1_description/meshes/collision/z1_GripperMover.STL"
+                            scale="1 1 1" />
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin rpy="0 0 0"
+                        xyz="${GripperMover_ComX} ${GripperMover_ComY} ${GripperMover_ComZ}" />
+                    <mass value="${GripperMover_Mass}" />
+                    <inertia
+                        ixx="${GripperMover_Ixx}" ixy="${GripperMover_Ixy}" ixz="${GripperMover_Ixz}"
+                        iyy="${GripperMover_Iyy}" iyz="${GripperMover_Iyz}"
+                        izz="${GripperMover_Izz}" />
+                </inertial>
+            </link>
+
+            <joint name="z1_tcp_joint" type="fixed">
+                <origin rpy="0 0 0" xyz="0.140 0.0 0.0" />
+                <parent link="gripperStator" />
+                <child link="z1_tcp" />
+            </joint>
+
+            <link name="z1_tcp"/>
+
+
+            <gazebo reference="gripperStator">
+                <self_collide>true</self_collide>
+            </gazebo>
+
+            <gazebo reference="gripperMover">
+                <self_collide>true</self_collide>
+            </gazebo>
+        </xacro:if>
+
+        <xacro:if value="${with_camera}">
+            <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
+            <xacro:property name="mount" value="${xacro.load_yaml('$(find z1_description)/config/camera_mount.yaml')['sensor_origin']}" />
+            <xacro:sensor_d435i
+                parent="${'gripperStator' if with_gripper else 'link06'}"
+                name="camera"
+                use_nominal_extrinsics="false">
+                <origin xyz="${mount['xyz'][0] + (0.0 if with_gripper else 0.051)} ${mount['xyz'][1]} ${mount['xyz'][2]}"
+                        rpy="${mount['rpy'][0]} ${mount['rpy'][1]} ${mount['rpy'][2]}" />
+            </xacro:sensor_d435i>
+        </xacro:if>
+    </xacro:macro>
+
+</robot>

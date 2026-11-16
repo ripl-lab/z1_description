@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- The Robotiq build: a Robotiq 2F-85 on its GRP-CPL-062 coupling, on the U-bracket of the gripper motor, and
+     a D405 on the portal over the gripper (proposal I of the wrist-camera page). The fingers open left and
+     right (along y of gripperStator), the cable leaves to the right.
+
+     The 2F-85 is one rigid link, drawn open: its fingers have no joints here, and the Robotiq driver does not
+     publish into this URDF. Its collision mesh keeps the space between the open pads free. z1_tcp is the point
+     between the open pads. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find z1_description)/urdf/lab/common.xacro" />
+
+    <xacro:macro name="z1_robotiq_2f85" params="with_gripper with_camera">
+        <xacro:property name="lab" value="${xacro.load_yaml('$(find z1_description)/config/lab/robotiq_2f85.yaml')}" />
+
+        <xacro:z1_bare_gripper_motor with_gripper="${with_gripper}" />
+        <xacro:z1_lab_part name="robotiq_mount" p="${lab['parts']['robotiq_mount']}" />
+        <xacro:z1_lab_part name="robotiq_2f85" p="${lab['parts']['robotiq_2f85']}" />
+        <xacro:z1_lab_frame name="z1_tcp" f="${lab['frames']['z1_tcp']}" />
+
+        <xacro:if value="${with_camera}">
+            <xacro:z1_lab_part name="d405_mount" p="${lab['parts']['d405_mount']}" />
+            <xacro:z1_lab_camera name="d405" c="${lab['cameras']['d405']}" />
+        </xacro:if>
+    </xacro:macro>
+
+</robot>

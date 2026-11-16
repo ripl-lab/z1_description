@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!-- The Z1 with one of the lab's end-of-arm variants, as a macro that a larger robot includes (b2_description
+     puts it on the B2). z1.urdf.xacro uses it for the arm alone.
+
+     variant:
+       unitree_gripper  Unitree's gripper and the wrist D435i at its hand-eye mount (default)
+       bota_probe       Bota F/T sensor and ball probe, a D405 below and the D435i on a mast
+       robotiq_2f85     Robotiq 2F-85, a D405 on a portal over it
+     with_gripper  the gripper motor is wired: jointGripper is in the URDF. With unitree_gripper set to false,
+                   the arm ends at link06.
+     with_camera   the variant's cameras and their mounts are in the URDF. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find z1_description)/urdf/z1_arm.xacro" />
+    <xacro:include filename="$(find z1_description)/urdf/z1_gripper.xacro" />
+    <xacro:include filename="$(find z1_description)/urdf/lab/bota_probe.xacro" />
+    <xacro:include filename="$(find z1_description)/urdf/lab/robotiq_2f85.xacro" />
+
+    <xacro:macro name="z1" params="parent *origin variant:=unitree_gripper with_gripper:=true with_camera:=true mount_joint:=z1_mount">
+        <!-- Launch arguments arrive as the strings "true" and "false". -->
+        <xacro:property name="gripper" value="${str(with_gripper).lower() == 'true'}" />
+        <xacro:property name="camera" value="${str(with_camera).lower() == 'true'}" />
+
+        <xacro:z1_arm parent="${parent}" mount_joint="${mount_joint}">
+            <xacro:insert_block name="origin" />
+        </xacro:z1_arm>
+
+        <xacro:if value="${variant == 'unitree_gripper'}">
+            <xacro:z1_unitree_gripper with_gripper="${gripper}" with_camera="${camera}" />
+        </xacro:if>
+        <xacro:if value="${variant == 'bota_probe'}">
+            <xacro:z1_bota_probe with_gripper="${gripper}" with_camera="${camera}" />
+        </xacro:if>
+        <xacro:if value="${variant == 'robotiq_2f85'}">
+            <xacro:z1_robotiq_2f85 with_gripper="${gripper}" with_camera="${camera}" />
+        </xacro:if>
+        <xacro:unless value="${variant in ('unitree_gripper', 'bota_probe', 'robotiq_2f85')}">
+            ${xacro.fatal('unknown Z1 variant', variant, '- use unitree_gripper, bota_probe or robotiq_2f85')}
+        </xacro:unless>
+    </xacro:macro>
+
+</robot>

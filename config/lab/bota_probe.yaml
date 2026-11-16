@@ -1,0 +1,68 @@
+# Written by cad/gripper-prototype/export_z1_description.py in b2_ws; do not edit by hand.
+# Frame G is gripperStator: origin at the J6 flange face, x out along J6, y along the gripper motor axis,
+# z up at the zero pose. Lengths in m, angles in rad, masses in kg, inertias in kg m2 about the centre of
+# mass in the axes of frame G (ixx, iyy, izz, ixy, ixz, iyz). Each camera origin is its bottom screw frame.
+title: "Bota Medusa F/T sensor with the ball probe, a D405 below and a D435i on a mast (proposal G)"
+parts:
+  bota_mount:
+    mesh: "lab/bota_mount.stl"
+    collision: "lab/collision/bota_mount.stl"
+    rgba: [0.85, 0.45, 0.1, 1.0]
+    mass: 0.0866
+    com: [0.082014, -0.003791, -3e-06]
+    inertia: [0.000111586, 0.000100024, 0.000132907, 5.25e-07, 5e-09, -2e-09]
+    source: "bota_mount.py, robot face; printed PETG, 1.8 mm walls, 40 % gyroid"
+  bota_sensor:
+    mesh: "lab/bota_sensor.stl"
+    collision: "lab/collision/bota_sensor.stl"
+    rgba: [0.75, 0.75, 0.78, 1.0]
+    mass: 0.113
+    com: [0.127091, -0.002682, -1.4e-05]
+    inertia: [5.0801e-05, 3.1655e-05, 4.0451e-05, -1.172e-06, 1.5e-08, 3.5e-08]
+    source: "Bota Medusa side STEP; 113 g datasheet"
+  bota_probe:
+    mesh: "lab/bota_probe.stl"
+    collision: "lab/collision/bota_probe.stl"
+    rgba: [0.85, 0.45, 0.1, 1.0]
+    mass: 0.0175
+    com: [0.162856, 0.0, 0.0]
+    inertia: [1.327e-06, 6.791e-06, 6.791e-06, 0.0, 0.0, 0.0]
+    source: "bota_probe.py; printed PETG, 1.8 mm walls, 40 % gyroid"
+  d405_mount:
+    mesh: "lab/d405_mount.stl"
+    collision: "lab/collision/d405_mount.stl"
+    rgba: [0.85, 0.45, 0.1, 1.0]
+    mass: 0.016
+    com: [0.110472, 0.0, -0.04259]
+    inertia: [2.775e-06, 2.269e-06, 2.566e-06, 0.0, 8.3e-07, 0.0]
+    source: "camera_mount.py, D405 chin of proposal G; printed PETG, 1.8 mm walls, 40 % gyroid"
+  camera_mount:
+    mesh: "lab/camera_mount.stl"
+    collision: "lab/collision/camera_mount.stl"
+    rgba: [0.85, 0.45, 0.1, 1.0]
+    mass: 0.0454
+    com: [0.01461, -0.003506, 0.049656]
+    inertia: [6.7575e-05, 4.9379e-05, 7.8223e-05, -8e-09, 2.0603e-05, 9e-09]
+    source: "camera_mount.py, D435 mast of proposal G; printed PETG, 1.8 mm walls, 40 % gyroid"
+frames:
+  bota_wrench:
+    xyz: [0.1415, 0.0, 0.0]
+    rpy: [-3.141593, -1.570796, 0.0]
+  probe_ball:
+    xyz: [0.2015, 0.0, 0.0]
+    rpy: [0.0, 0.0, 0.0]
+  probe_tip:
+    xyz: [0.209, 0.0, 0.0]
+    rpy: [0.0, 0.0, 0.0]
+  z1_tcp:
+    xyz: [0.2015, 0.0, 0.0]
+    rpy: [0.0, 0.0, 0.0]
+cameras:
+  d405:
+    model: "d405"
+    xyz: [0.140984, 0.0, -0.071029]
+    rpy: [0.0, -0.401426, 0.0]
+  camera:
+    model: "d435i"
+    xyz: [-0.002848, 0.0, 0.06676]
+    rpy: [0.0, 0.193732, 0.0]

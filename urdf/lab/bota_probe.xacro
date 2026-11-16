@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- The Bota probe build: a Bota Medusa F/T sensor (serial) on the U-bracket that holds its robot face, the
+     ball-ended probe on its tool flange, a D405 in a saddle below the face plate and the D435i on a portal
+     over the motor (proposal G of the wrist-camera page). The sensor is turned 90° about J6, its M8 connector
+     to the right (-y of gripperStator).
+
+     Frames: bota_wrench is the sensor's wrench frame (on the axis at the tool face, z out of the tool side,
+     y towards the connector); probe_ball is the ball centre, 60 mm past the flange; probe_tip is the front of
+     the Ø15 ball; z1_tcp is the ball centre. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find z1_description)/urdf/lab/common.xacro" />
+
+    <xacro:macro name="z1_bota_probe" params="with_gripper with_camera">
+        <xacro:property name="lab" value="${xacro.load_yaml('$(find z1_description)/config/lab/bota_probe.yaml')}" />
+
+        <xacro:z1_bare_gripper_motor with_gripper="${with_gripper}" />
+        <xacro:z1_lab_part name="bota_mount" p="${lab['parts']['bota_mount']}" />
+        <xacro:z1_lab_part name="bota_sensor" p="${lab['parts']['bota_sensor']}" />
+        <xacro:z1_lab_part name="bota_probe" p="${lab['parts']['bota_probe']}" />
+        <xacro:z1_lab_frame name="bota_wrench" f="${lab['frames']['bota_wrench']}" />
+        <xacro:z1_lab_frame name="probe_ball" f="${lab['frames']['probe_ball']}" />
+        <xacro:z1_lab_frame name="probe_tip" f="${lab['frames']['probe_tip']}" />
+        <xacro:z1_lab_frame name="z1_tcp" f="${lab['frames']['z1_tcp']}" />
+
+        <xacro:if value="${with_camera}">
+            <xacro:z1_lab_part name="d405_mount" p="${lab['parts']['d405_mount']}" />
+            <xacro:z1_lab_camera name="d405" c="${lab['cameras']['d405']}" />
+            <xacro:z1_lab_part name="camera_mount" p="${lab['parts']['camera_mount']}" />
+            <xacro:z1_lab_camera name="camera" c="${lab['cameras']['camera']}" />
+        </xacro:if>
+    </xacro:macro>
+
+</robot>
