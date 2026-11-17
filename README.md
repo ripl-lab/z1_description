@@ -126,14 +126,15 @@ The fixed joint is `z1_mount`. Set `mount_joint` to give it another name.
 | `config/lab/*.yaml` | Masses, frames and camera mounts of each lab variant. Generated. |
 | `meshes/visual/`, `meshes/collision/` | Unitree's meshes, in m. |
 | `meshes/lab/` | The lab parts in the `gripperStator` frame, in mm. `meshes/lab/collision/` holds their convex hulls. Generated. |
-| `mjcf/` | The MuJoCo model of the Z1 with Unitree's gripper and the D435i. The lab variants have no MuJoCo model yet. |
+| `mjcf/` | The MuJoCo model of the Z1 with Unitree's gripper and the D435i (`scene.xml`), and with the Bota probe (`scene_bota_probe.xml`, generated). The Bota model has force and torque sensors at `bota_wrench`, on the tool body `bota_probe` (the probe and the sensor's tool-side flange). `robotiq_2f85` has no MuJoCo model yet. |
 | `launch/display.launch.py`, `config/display.rviz` | RViz with joint sliders. |
 | `scripts/render_frames.py` | Pictures of each variant with every frame drawn. |
 
 ## Regenerate
 
 **Lab variants.** The lab CAD lives in b2_ws, in `cad/gripper-prototype`. Its script writes `config/lab/` and
-`meshes/lab/` from the build123d parts and from the camera poses of the wrist-camera page:
+`meshes/lab/` from the build123d parts and from the camera poses of the wrist-camera page, and
+`mjcf/z1_bota_probe.xml` and `scene_bota_probe.xml` from `mjcf/z1.xml` and `config/lab/bota_probe.yaml`:
 
 ```bash
 cd ~/b2_ws/cad/gripper-prototype
